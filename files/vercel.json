@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/**/*.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    { "src": "/api/live-summary",            "dest": "/api/live-summary.py"         },
+    { "src": "/api/party-seats",             "dest": "/api/party-seats.py"          },
+    { "src": "/api/pr",                      "dest": "/api/pr.py"                   },
+    { "src": "/api/health",                  "dest": "/api/health.py"               },
+    { "src": "/api/search",                  "dest": "/api/search.py"               },
+    { "src": "/api/constituency/([0-9]+)",   "dest": "/api/constituency/[id].py"    },
+    { "src": "/api/province/([^/]+)",        "dest": "/api/province/[name].py"      },
+    { "src": "/(.*)",                        "dest": "/frontend/$1"                 }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin",  "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" },
+        { "key": "Cache-Control",                "value": "public, max-age=60, stale-while-revalidate=30" }
+      ]
+    }
+  ]
+}

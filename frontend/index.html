@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- SEO -->
+  <title>Nepal Election 2082 — Live Results | House of Representatives</title>
+  <meta name="description" content="Live election results for Nepal's House of Representatives (Pratinidhi Sabha) 2082. Real-time seat counts, constituency-wise results, party standings and vote tallies from all 165 FPTP constituencies." />
+  <meta name="keywords" content="Nepal Election 2082, Nepal election results, Pratinidhi Sabha, House of Representatives Nepal, CPN UML, Nepali Congress, RSP, election results live, Falgun 2082, constituency search" />
+  <meta name="author" content="Nepal Election 2082 Open Data" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://nepal-election-2082.vercel.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Nepal Election 2082 — Live Results" />
+  <meta property="og:description" content="Track live constituency-by-constituency results for Nepal's House of Representatives election 2082." />
+  <meta property="og:image"       content="https://nepal-election-2082.vercel.app/images/og-image.png" />
+  <meta property="og:url"         content="https://nepal-election-2082.vercel.app/" />
+  <meta property="og:locale"      content="en_NP" />
+  <meta property="og:site_name"   content="Nepal Election 2082 Live" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Nepal Election 2082 — Live Results" />
+  <meta name="twitter:description" content="Live seat counts, constituency races and party standings for Nepal's 2082 general election." />
+  <meta name="twitter:image"       content="https://nepal-election-2082.vercel.app/images/og-image.png" />
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Nepal Election 2082 — Live Results",
+    "description": "Real-time election results for Nepal House of Representatives 2082",
+    "url": "https://nepal-election-2082.vercel.app/",
+    "inLanguage": ["en","ne"],
+    "about": {
+      "@type": "Event",
+      "name": "Nepal General Election 2082",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": { "@type": "Country", "name": "Nepal" }
+    }
+  }
+  </script>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇳🇵</text></svg>" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&family=Noto+Sans+Devanagari:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     CONSTITUENCY DETAIL MODAL
+══════════════════════════════════════════════════════════════ -->
+<div id="const-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-title-text">Constituency Name</div>
+        <div class="modal-subtitle">District · Province · #</div>
+        <div class="modal-status ms-counting">⚡ COUNTING</div>
+      </div>
+      <button class="modal-close" id="modal-close-btn" aria-label="Close constituency detail">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3l-10 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- Counting progress -->
+      <div class="modal-progress-wrap">
+        <div class="modal-prog-label">
+          <span>Votes Counted</span>
+          <strong class="modal-prog-strong">0%</strong>
+        </div>
+        <div class="modal-prog-bar">
+          <div class="modal-prog-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Winner -->
+      <div id="modal-winner-wrap"></div>
+
+      <!-- Vote distribution bar -->
+      <div id="modal-track-wrap"></div>
+
+      <!-- Challengers -->
+      <div id="modal-challengers-wrap"></div>
+
+    </div>
+
+    <div class="modal-footer">
+      Data sourced from result.election.gov.np · Auto-refreshes every 60s · All counts preliminary until officially declared
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════════════ -->
+<header id="site-header" role="banner">
+
+  <!-- Red top bar with global search -->
+  <div class="h-top-bar">
+
+    <div class="h-brand">
+      <span class="h-flag" aria-label="Nepal flag">🇳🇵</span>
+      <span class="h-ecn">Election Commission of Nepal &nbsp;·&nbsp; 2082</span>
+    </div>
+
+    <!-- ── GLOBAL CONSTITUENCY SEARCH ── -->
+    <div class="h-global-search" role="search" aria-label="Search any constituency">
+      <div class="hgs-input-wrap">
+        <svg class="hgs-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M13 13l3.5 3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+        <input
+          type="search"
+          id="hgs-input"
+          class="hgs-input"
+          placeholder="Search any constituency, candidate, district…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search all 165 constituencies"
+          aria-haspopup="listbox"
+          aria-autocomplete="list"
+        />
+        <button class="hgs-clear" id="hgs-clear" aria-label="Clear search">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <!-- Dropdown results -->
+      <div class="hgs-dropdown" id="hgs-dropdown" role="listbox" aria-label="Constituency search results"></div>
+    </div>
+
+    <div class="h-live-badge" role="status" aria-live="polite" aria-label="Live vote counting in progress">
+      <div class="h-live-dot" aria-hidden="true"></div>
+      <span>Live</span>
+    </div>
+
+  </div>
+
+  <!-- Title bar -->
+  <div class="h-main-bar">
+    <div>
+      <h1 class="h-headline">Nepal <em>Election</em> 2082</h1>
+      <p class="h-subline">प्रतिनिधि सभा निर्वाचन — House of Representatives — Falgun 21, 2082 BS</p>
+    </div>
+    <div class="h-meta-right">
+      <div>
+        <div class="h-date">March 6, 2026</div>
+        <div class="h-bs-date">फागुन २१, २०८२</div>
+      </div>
+      <div>
+        <div class="h-clock" id="clock" aria-label="Current time">--:--:--</div>
+        <div class="h-clock-lbl">Last Updated</div>
+      </div>
+    </div>
+  </div>
+
+</header>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN LAYOUT
+══════════════════════════════════════════════════════════════ -->
+<div id="app-layout">
+
+  <!-- ── MAIN COLUMN ──────────────────────────────────────── -->
+  <main class="col-main" role="main">
+
+    <!-- SEAT PROJECTION -->
+    <section class="sect" aria-labelledby="lbl-seats">
+      <div class="sect-label" id="lbl-seats">
+        <span class="lbl-icon">🏛</span>
+        Parliament Seat Projection — 275 Total
+      </div>
+
+      <div role="img" aria-label="Seat distribution bar">
+        <div class="seats-bar" id="seats-bar">
+          <div class="majority-line" aria-hidden="true"></div>
+          <div class="loader"><div class="spinner" aria-hidden="true"></div><span>Loading…</span></div>
+        </div>
+        <div class="bar-axis" aria-hidden="true">
+          <span>0</span>
+          <span style="color:var(--gold)">← 275 seats →</span>
+          <span>275</span>
+        </div>
+      </div>
+
+      <div class="party-grid" id="party-grid" role="list" aria-label="Party seat counts">
+        <div class="loader"><div class="spinner" aria-hidden="true"></div></div>
+      </div>
+    </section>
+
+    <!-- HOT ZONES / CONSTITUENCIES -->
+    <section class="sect" aria-labelledby="lbl-zones">
+      <div class="sect-label" id="lbl-zones">
+        <span class="lbl-icon">🗺</span>
+        Constituency Race — Hot Zones
+      </div>
+
+      <!-- Inline zone search -->
+      <div class="zone-search-wrap" role="search" aria-label="Filter constituencies below">
+        <div class="zsw-input-wrap">
+          <svg class="zsw-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M13 13l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <input
+            type="search"
+            id="zone-search"
+            class="zsw-input"
+            placeholder="Filter hot zones by name, district, candidate, party…"
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Filter hot zones"
+          />
+          <button class="zsw-clear" id="zone-search-clear" aria-label="Clear filter">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="zsw-results-count" id="search-count" aria-live="polite" aria-atomic="true"></div>
+      </div>
+
+      <!-- Province filter pills -->
+      <nav class="filter-bar" role="navigation" aria-label="Filter by province">
+        <button class="fpill active" onclick="filterZones('all',this)"              aria-pressed="true">All</button>
+        <button class="fpill" onclick="filterZones('Koshi',this)"                   aria-pressed="false">Koshi</button>
+        <button class="fpill" onclick="filterZones('Madhesh',this)"                 aria-pressed="false">Madhesh</button>
+        <button class="fpill" onclick="filterZones('Bagmati',this)"                 aria-pressed="false">Bagmati</button>
+        <button class="fpill" onclick="filterZones('Gandaki',this)"                 aria-pressed="false">Gandaki</button>
+        <button class="fpill" onclick="filterZones('Lumbini',this)"                 aria-pressed="false">Lumbini</button>
+        <button class="fpill" onclick="filterZones('Karnali',this)"                 aria-pressed="false">Karnali</button>
+        <button class="fpill" onclick="filterZones('Sudurpashchim',this)"           aria-pressed="false">Sudurpashchim</button>
+      </nav>
+
+      <div class="zones-grid" id="zones-grid" role="list" aria-label="Constituency results">
+        <div class="loader"><div class="spinner" aria-hidden="true"></div><span>Loading constituencies…</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── SIDEBAR ──────────────────────────────────────────── -->
+  <aside class="col-side" role="complementary" aria-label="Key stats and party standings">
+
+    <div class="ssect">
+      <div class="ssect-lbl">Key Numbers</div>
+      <div class="kn-grid">
+        <div class="kn-box"><div class="kn-num accent" id="s-dec">—</div><div class="kn-label">Declared</div></div>
+        <div class="kn-box"><div class="kn-num" id="s-cnt">—</div><div class="kn-label">Counting</div></div>
+        <div class="kn-box"><div class="kn-num">165</div><div class="kn-label">FPTP Seats</div></div>
+        <div class="kn-box"><div class="kn-num gold">138</div><div class="kn-label">For Majority</div></div>
+        <div class="kn-box"><div class="kn-num">110</div><div class="kn-label">PR Seats</div></div>
+        <div class="kn-box"><div class="kn-num">275</div><div class="kn-label">Total Parl.</div></div>
+      </div>
+
+      <div class="majority-meter" aria-label="Majority progress">
+        <div class="mm-label">
+          <span>Leader vs Majority</span>
+          <span style="color:var(--gold)">138 needed</span>
+        </div>
+        <div class="mm-track" role="progressbar" aria-valuemin="0" aria-valuemax="138">
+          <div class="mm-fill" id="majority-fill" style="width:0%"></div>
+          <div class="mm-marker" aria-hidden="true"></div>
+        </div>
+        <div class="mm-note" id="majority-note">Calculating…</div>
+      </div>
+    </div>
+
+    <div class="ssect">
+      <div class="ssect-lbl">Party Standings</div>
+      <div class="lead-table" id="lead-table" role="list">
+        <div class="loader"><div class="spinner" aria-hidden="true"></div></div>
+      </div>
+    </div>
+
+    <div class="ssect">
+      <div class="ssect-lbl">Open Data API</div>
+      <p style="font-size:.61rem;color:var(--text-3);line-height:1.75;margin-bottom:11px">
+        Serverless JSON endpoints scraped from <strong>result.election.gov.np</strong>. No key required. Refreshes every 60s.
+      </p>
+      <div class="api-endpoint"><div class="api-method">GET</div><code class="api-path">/api/live-summary</code><div class="api-desc">Full snapshot — seats, parties, status</div></div>
+      <div class="api-endpoint"><div class="api-method">GET</div><code class="api-path">/api/party-seats</code><div class="api-desc">FPTP + PR breakdown per party</div></div>
+      <div class="api-endpoint"><div class="api-method">GET</div><code class="api-path">/api/constituency/[id]</code><div class="api-desc">Single constituency full detail</div></div>
+      <div class="api-endpoint"><div class="api-method">GET</div><code class="api-path">/api/province/[name]</code><div class="api-desc">All seats for a province</div></div>
+      <div class="api-endpoint"><div class="api-method">GET</div><code class="api-path">/api/search?q=</code><div class="api-desc">Candidate or constituency search</div></div>
+      <div class="api-endpoint"><div class="api-method">GET</div><code class="api-path">/api/pr</code><div class="api-desc">Proportional representation data</div></div>
+      <pre class="api-code" aria-label="Sample API response">{
+  "updated_at": "2026-03-06T14:22:00Z",
+  "parties": [{
+    "id": "CPN-UML",
+    "fptp_won": 47,
+    "pr_estimate": 30,
+    "total": 77
+  }],
+  "declared": 12,
+  "counting": 153,
+  "total": 165
+}</pre>
+    </div>
+
+    <footer class="site-footer" role="contentinfo">
+      <p class="footer-note">
+        Data sourced from <a href="https://result.election.gov.np" target="_blank" rel="noopener noreferrer">result.election.gov.np</a> — Election Commission of Nepal. Independent open-data dashboard. Refreshes every 60s. All counts are preliminary until officially declared.
+      </p>
+    </footer>
+
+  </aside>
+
+</div><!-- /#app-layout -->
+
+<script src="assets/app.js"></script>
+
+</body>
+</html>
